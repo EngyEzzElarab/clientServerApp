@@ -13,24 +13,40 @@ public class client extends Thread{
     public void run() {
         String str = "";
         DataOutputStream dout =null;
+        Scanner sc = new Scanner(System.in);
+
         while (true) {
-            Scanner sc = new Scanner(System.in);
             System.out.println("ENTER A NEW MESSAGE");
             str = sc.nextLine();
-            if (str.equals("over"))
-                break;
+
             try {
-                if(s == null) {
+                while(s==null) {
                     s = new Socket("localhost", portNum);
                     dout = new DataOutputStream(s.getOutputStream());
                 }
                 dout.writeUTF(str);
                 dout.flush();
+                if (str.equals("over"))
+                {
+                    break;
+//                    try {
+//                        s.close();
+//
+//                    } catch (IOException e) {
+//                        System.out.println(e.getMessage());
+//                    }
+
+                }
                 //dout.close();
               //  s.close();
             } catch (Exception e) {
                 System.out.println(e);
             }
+        }
+        try {
+            s.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

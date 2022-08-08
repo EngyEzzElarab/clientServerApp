@@ -16,17 +16,23 @@ public class server extends Thread{
             ss = new ServerSocket(portNumber);
             System.out.println("Server started");
             System.out.println("Waiting for a client ...");
-
+            s = ss.accept();
             System.out.println("Client accepted");
+
             while (true) {
-                s = ss.accept();
+
                 DataInputStream dis = new DataInputStream(s.getInputStream());
                 str = (String) dis.readUTF();
+                System.out.println("String sent to server "+str);
                 System.out.println("message= " + str);
                 protocol.checkProtocol(str);
 
                 if (str.equals("over"))
+                {
+                    System.out.println("Server Disconnecting");
                     break;
+
+                }
             }
             ss.close();
 
